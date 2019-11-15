@@ -4,6 +4,18 @@ const bcrypt = require("bcryptjs");
 
 const JWT = require("./token");
 const Users = require("./auth-model");
+const restricted = require("./authenticate-middleware");
+
+router.get("/", restricted, (req, res) => {
+  Users.find()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(err => {
+      console.log("Error..", err);
+      res.status(500).json(err);
+    });
+});
 
 router.post("/register", (req, res) => {
   // implement registration
